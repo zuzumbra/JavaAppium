@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.ArticlePageObjectFactory;
@@ -12,6 +13,9 @@ public class ChangeAppConditionTests extends CoreTestCase
 {
     @Test
     public void testAmountOfNotEmptySearch() {
+        if (Platform.getInstance().isMW()) {
+            return;
+        }
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
 
@@ -29,6 +33,9 @@ public class ChangeAppConditionTests extends CoreTestCase
     @Test
 
     public void testAmountOfEmptySearch() {
+        if (Platform.getInstance().isMW()) {
+            return;
+        }
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
 
@@ -42,6 +49,9 @@ public class ChangeAppConditionTests extends CoreTestCase
 
     @Test
     public void testChangeScreenOrientationOnSearchResults(){
+        if (Platform.getInstance().isMW()) {
+            return;
+        }
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
@@ -69,14 +79,15 @@ public class ChangeAppConditionTests extends CoreTestCase
 
     @Test
     public void testCheckSearchArticleInBackground(){
+        if (Platform.getInstance().isMW()) {
+            return;
+        }
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.waitForSearchResult("Object-oriented programming language");
         this.backgroundApp(2);
-
-        driver.runAppInBackground(2);
         searchPageObject.waitForSearchResult("Object-oriented programming language");
 
     }

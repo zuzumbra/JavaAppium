@@ -4,6 +4,8 @@ import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -16,13 +18,14 @@ abstract public class SearchPageObject extends MainPageObject {
             SEARCH_RESULT_BY_SUBSTRING_TPL,
             SEARCH_RESULT_ELEMENT,
             SEARCH_EMPTY_RESULT_ELEMENT,
+            SEARCH_RESULT_BY_TITLE_TPL,
             SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL,
             SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION,
             SEARCH_TITLE,
             SEARCH_DESCRIPTION;
 
 
-    public SearchPageObject(AppiumDriver driver)
+    public SearchPageObject(RemoteWebDriver driver)
     {
         super(driver);
     }
@@ -38,6 +41,11 @@ abstract public class SearchPageObject extends MainPageObject {
         return SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL
                 .replace("{TITLE}", title)
                 .replace("{DESCRIPTION}", description);
+    }
+
+    private  static String getResultSearchElementByTitle(String title)
+    {
+        return SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL.replace("{TITLE}", title);
     }
     /*TEMPLATES METHODS*/
 
@@ -63,6 +71,12 @@ abstract public class SearchPageObject extends MainPageObject {
     {
         this.waitForElementAndClick(SEARCH_INIT_ELEMENT, "Cannot find and click search init element", 5);
         this.waitForElementPresent(SEARCH_INIT_ELEMENT, "Cannot find search input after clicking init element");
+    }
+
+    public void clearSearchInput()
+    {
+        this.waitForElementAndClear(SEARCH_INPUT, "Cannot find and click search init element", 5);
+
     }
 
     public void typeSearchLine(String search_line)
@@ -105,6 +119,12 @@ abstract public class SearchPageObject extends MainPageObject {
     {
         String SearchResultXpath = getResultSearchElementByTitleAndDescription(title, description);
         this.waitForElementPresent(SearchResultXpath, "Cannot find search result with title " + title + " and description " +  description, 10);
+    }
+
+    public void clickByTitleWithSubstring(String title)
+    {
+        String SearchResultXpath = getResultSearchElementByTitle(title);
+        this.waitForElementAndClick(SearchResultXpath, "Cannot find search result with title " + title, 10);
     }
 
     public int getAmountOfFoundArticles()
